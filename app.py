@@ -5,7 +5,7 @@ import qrcode
 import MySQLdb.cursors
 import cv2
 import numpy as np
-import pyzbar.pyzbar as pyzbar
+from cv2 import QRCodeDetector
 import secrets
 import hashlib
 import bcrypt
@@ -418,23 +418,23 @@ def process_scan():
 
 def gen_frames():
     camera = cv2.VideoCapture(0)
+    qr_detector = QRCodeDetector()
+    
     while True:
         success, frame = camera.read()
         if not success:
             break
         
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        decoded_objects = pyzbar.decode(gray)
+        # Detect QR codes
+        retval, decoded_info, points, straight_qrcode = qr_detector.detectAndDecodeMulti(frame)
         
-        for obj in decoded_objects:
-            points = obj.polygon
-            if len(points) > 4:
-                hull = cv2.convexHull(np.array([point for point in points], dtype=np.float32))
-                points = hull
-            
-            n = len(points)
-            for j in range(n):
-                cv2.line(frame, tuple(points[j]), tuple(points[(j+1) % n]), (0, 255, 0), 3)
+        if retval and len(decoded_info) > 0:
+            for i, (info, pts) in enumerate(zip(decoded_info, points)):
+                if info:  # Only draw if we found a QR code with content
+                    pts = pts.astype(int)
+                    n = len(pts)
+                    for j in range(n):
+                        cv2.line(frame, tuple(pts[j]), tuple(pts[(j+1) % n]), (0, 255, 0), 3)
         
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()

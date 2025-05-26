@@ -2,9 +2,74 @@
 <html>
 <head>
     <title>QR Code Scanner</title>
+    <style>
+        #scanner-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+        }
+        
+        #scan-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            border: 3px solid rgba(0, 255, 0, 0.5);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        
+        #result {
+            display: none;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 640px;
+            text-align: center;
+        }
+        
+        .entry {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 2px solid green;
+        }
+        
+        .exit {
+            background-color: rgba(255, 165, 0, 0.1);
+            border: 2px solid orange;
+        }
+        
+        .error {
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 2px solid red;
+        }
+        
+        .user-info {
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+        
+        .action-buttons {
+            text-align: center;
+            margin: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>QR Code Scanner</h1>
+    <h1 style="text-align: center;">QR Code Scanner</h1>
     
     <div id="scanner-container">
         <img id="video" src="{{ url_for('video_feed') }}">
@@ -29,52 +94,28 @@
         const scanAgainBtn = document.getElementById('scan-again');
         const backBtn = document.getElementById('back-to-dashboard');
         
-        // QR code detection
-        const qrWorker = new Worker("{{ url_for('static', filename='js/qr-scanner-worker.js') }}");
+        // Track if we're currently processing a QR code
+        let isProcessing = false;
         
-        // Get canvas for QR detection
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Set canvas dimensions to match video
-        function updateCanvasSize() {
-            canvas.width = video.videoWidth || video.clientWidth;
-            canvas.height = video.videoHeight || video.clientHeight;
-        }
-        
-        // Scan for QR codes periodically
-        let scanInterval = setInterval(() => {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                updateCanvasSize();
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                qrWorker.postMessage(imageData);
-            }
-        }, 500);
-        
-        // Handle QR code detection
-        qrWorker.onmessage = function(e) {
-            if (e.data && e.data.length > 0) {
-                // Found a QR code - stop scanning and process
-                clearInterval(scanInterval);
-                processQRCode(e.data[0]);
-            }
-        };
-        
-        // Process the scanned QR code
-        function processQRCode(code) {
-            fetch("{{ url_for('process_scan') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ code: code })
-            })
-            .then(response => response.json())
-            .then(data => {
+        // Function to process the scanned QR code
+        async function processQRCode(code) {
+            if (isProcessing) return;
+            isProcessing = true;
+            
+            try {
+                const response = await fetch("{{ url_for('process_scan') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.style.display = 'block';
+                
                 if (data.success) {
-                    resultDiv.style.display = 'block';
-                    
                     if (data.status === 'ENTRY') {
                         resultDiv.className = 'entry';
                         statusMessage.textContent = 'ENTRY LOGGED';
@@ -87,38 +128,40 @@
                         <p><strong>User:</strong> ${data.user}</p>
                         <p><strong>Location:</strong> ${data.location}</p>
                     `;
-                    
-                    scanAgainBtn.style.display = 'inline-block';
                 } else {
-                    resultDiv.style.display = 'block';
                     resultDiv.className = 'error';
                     statusMessage.textContent = 'ERROR';
                     userInfo.innerHTML = `<p>${data.message}</p>`;
-                    scanAgainBtn.style.display = 'inline-block';
                 }
-            })
-            .catch(error => {
+                
+                scanAgainBtn.style.display = 'inline-block';
+            } catch (error) {
                 console.error('Error:', error);
                 resultDiv.style.display = 'block';
                 resultDiv.className = 'error';
                 statusMessage.textContent = 'ERROR';
                 userInfo.innerHTML = '<p>Failed to process QR code</p>';
                 scanAgainBtn.style.display = 'inline-block';
-            });
+            } finally {
+                isProcessing = false;
+            }
         }
+        
+        // Event listener for messages from the video feed
+        video.addEventListener('qrscanned', (event) => {
+            if (event.detail && event.detail.code) {
+                processQRCode(event.detail.code);
+            }
+        });
         
         // Button event handlers
         scanAgainBtn.addEventListener('click', () => {
             resultDiv.style.display = 'none';
             scanAgainBtn.style.display = 'none';
-            scanInterval = setInterval(() => {
-                if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    updateCanvasSize();
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    qrWorker.postMessage(imageData);
-                }
-            }, 500);
+            
+            // Send a message to restart scanning
+            const event = new CustomEvent('restartscan');
+            video.dispatchEvent(event);
         });
         
         backBtn.addEventListener('click', () => {
