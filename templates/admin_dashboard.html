@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <!-- Pending User Approvals Section -->
+    <div class="section">
+        <h2>Pending User Approvals</h2>
+        {% if pending_users %}
+        <table class="approval-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in pending_users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.full_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td class="actions">
+                        <form method="POST" action="{{ url_for('approve_user') }}" class="inline-form">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('decline_user', user_id=user.id) }}" class="inline-form">
+                            <button type="submit" class="btn btn-decline">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No pending user approvals.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Pending QR Requests Section -->
+    <div class="section">
+        <h2>Pending QR Code Requests</h2>
+        {% if pending_qrs %}
+        <table class="qr-table">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Username</th>
+                    <th>Requested At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for qr in pending_qrs %}
+                <tr>
+                    <td>{{ qr.id }}</td>
+                    <td>{{ qr.username }}</td>
+                    <td>{{ qr.requested_at }}</td>
+                    <td class="actions">
+                        <form method="POST" action="{{ url_for('approve_qr') }}" class="inline-form">
+                            <input type="hidden" name="qr_id" value="{{ qr.id }}">
+                            <input type="number" name="days_valid" min="1" max="30" value="7" class="days-input">
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('decline_qr', qr_id=qr.id) }}" class="inline-form">
+                            <button type="submit" class="btn btn-decline">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No pending QR code requests.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Parking Lot Status Section -->
+    <div class="section">
+        <h2>Parking Lot Status</h2>
+        <table class="lot-table">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Total Slots</th>
+                    <th>Available</th>
+                    <th>Occupied</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lot in parking_lots %}
+                <tr>
+                    <td>{{ lot.location_name }}</td>
+                    <td>{{ lot.total_slots }}</td>
+                    <td>{{ lot.available_slots }}</td>
+                    <td>{{ lot.total_slots - lot.available_slots }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Recent Activity Section -->
+    <div class="section">
+        <h2>Recent Parking Activity</h2>
+        {% if parking_logs %}
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>Log ID</th>
+                    <th>User</th>
+                    <th>QR Code</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in parking_logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.username }}</td>
+                    <td>{{ log.code }}</td>
+                    <td>{{ log.location_name }}</td>
+                    <td class="status-{{ log.status|lower }}">
+                        {{ log.status }}
+                    </td>
+                    <td>{{ log.scanned_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No parking activity yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

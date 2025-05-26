@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Welcome, {{ session.username }}!</h2>
+    
+    {% if qr_code %}
+    <div class="qr-section">
+        <h3>Your Parking QR Code</h3>
+        <p><strong>Status:</strong> 
+            <span class="{% if qr_code.is_active %}active{% else %}pending{% endif %}">
+                {% if qr_code.is_active %}ACTIVE{% else %}PENDING APPROVAL{% endif %}
+            </span>
+        </p>
+        <p><strong>Location:</strong> {{ qr_code.location_name }}</p>
+        <p><strong>Expires:</strong> {{ qr_code.expires_at }}</p>
+        
+        {% if qr_code.is_active %}
+            <img src="{{ url_for('generate_qr', code=qr_code.code) }}" width="200">
+            <a href="{{ url_for('generate_qr', code=qr_code.code, download=1) }}" class="btn">
+                Download QR
+            </a>
+            
+            {% if qr_code.expires_in_days < 3 %}
+                <form method="POST" action="{{ url_for('renew_qr') }}" style="margin-top: 15px;">
+                    <button type="submit" class="btn btn-primary">Renew QR Code</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="no-qr">
+        <h3>No Active QR Code</h3>
+        <form method="POST" action="{{ url_for('request_qr') }}">
+            <button type="submit" class="btn">Request QR Code</button>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Parking System{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block css %}
+    
+    {% endblock %}
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="header">
+        <h1>Parking System</h1>
+        <div class="nav">
+            {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                <a href="{{ url_for('scanner') }}">QR Scanner</a>
+            {% elif session.get('role') == 'user' %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            {% endif %}
+            {% if 'user_id' in session or 'admin_id' in session %}
+                <a href="{{ url_for('logout') }}" style="float: right;">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" style="float: right;">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
