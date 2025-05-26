@@ -30,6 +30,10 @@ def hash_password(password):
 def check_password_hash(hashed_password, user_password):
     return bcrypt.checkpw(user_password.encode(), hashed_password.encode())
 
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 # Routes
 @app.route('/')
 def home():
