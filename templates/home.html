@@ -2,9 +2,346 @@
 
 {% block title %}Login{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/team.css') }}">
+       <link rel="stylesheet" href="{{ url_for('static', filename='css/pricing.css') }}">
+
 {% endblock %}
 {% block content %}
+<header>
+  <div class="logo">
+    <img src="static/images/logoo.jpeg" alt="Logo">
+    <h2>Smart Parking System</h2>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <a href="{{ url_for('login') }}" class="login-btn">Log In</a>
+  
+</header>
 
+
+
+<!-- 🟢 HOME section with background set in HTML -->
+<!-- <section id="home" class="hero-section" style="background: url('static/images/bg2.jpg') no-repeat center center/cover;"> -->
+<section id="home" class="hero-section">
+  <div class="hero-content">
+    <h1>Smart, Secure & Effortless</h1>
+    <p>Campus parking made easy with QR code technology</p>
+    <a href="#about" class="hero-btn">Learn More</a>
+  </div>
+</section>
+
+<!-- 🟡 ABOUT section (uses main styling now) -->
+<section class="main" id="about">
+  <div class="description">
+    <h1>Smart, Secure & Effortless Parking</h1>
+    <br>
+    <p>
+      The Smart Parking System offers a secure and efficient way to manage campus parking using QR code technology. 
+      It allows students and staff to enter and exit through a contactless process, while also keeping a real-time digital record 
+      of all parking activity. No more manual checking — just scan and go.
+    </p>
+  </div>
+
+  <div class="image">
+    <img src="static/images/ff.jpeg" alt="Smart Parking">
+  </div>
+
+  <!-- Wrapper for stats and button -->
+  <div class="stats-section">
+    <div class="stats">
+      <div class="stat-box">
+        <h2>1,200+</h2>
+        <p>QR Gate Passes Issued</p>
+      </div>
+      <div class="stat-box">
+        <h2>95%</h2>
+        <p>User Satisfaction</p>
+      </div>
+      <div class="stat-box">
+        <h2>100%</h2>
+        <p>Secure Entry Records</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- 🟡 FEATURE Section -->
+<section id="features" style="background-color: #f9f9f9; padding: 60px 0;">
+  <div class="container">
+    <br><br>
+    <h1 style="text-align: center; margin-bottom: 20px;">The Ultimate Value</h1>
+    <p style="text-align: center; max-width: 800px; margin: 0 auto 40px;">
+      Smart Parking System transforms traditional sticker gate pass school parking into a smart, 
+      automated experience tailored to meet the unique needs of educational institutions.
+    </p>
+
+    <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+      
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-clock" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Digital Record of Entry</h3>
+        <p>Each entry and exit is time-stamped and logged for tracking and security.</p>
+      </div>
+
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-user-cog" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Profile Management</h3>
+        <p>Update details, view history, and manage QR codes seamlessly.</p>
+      </div>
+
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-qrcode" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">QR Code Entry System</h3>
+        <p>Secure access with QR scanning and real-time validation at gates.</p>
+      </div>
+
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-id-badge" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">QR Code Gate Pass</h3>
+        <p>Automatically generated gate pass for seamless and contactless entry.</p>
+      </div>
+
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-chalkboard-teacher" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Faculty Priority Parking</h3>
+        <p>Special slots for teachers and staff during peak hours.</p>
+      </div>
+
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-redo" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Lost QR Recovery Option</h3>
+        <p>Users can regenerate lost QR codes after identity verification.</p>
+      </div>
+
+      <!-- ✅ New Feature 1 -->
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-parking" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Real-time Slot Monitoring</h3>
+        <p>Users can view available and occupied slots on the dashboard in real-time.</p>
+      </div>
+
+      <!-- ✅ New Feature 2 -->
+      <div class="features-card" style="background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 30px; color: #00bcd4;"></i>
+        <h3 style="margin-top: 15px;">Emergency Alert Access</h3>
+        <p>Users can send emergency alerts to campus security from their device or dashboard.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- 🟡 Pricing Section -->
+<section id="pricing">
+  <h1 class="section-heading">Subscription Options</h1>
+  <div class="pricing-container">
+
+    <!-- One Month Plan -->
+    <div class="pricing-card">
+      <h2>1 Month Plan</h2>
+      <div class="price">₱99</div>
+      <p class="desc">Per month / prepaid</p>
+      <ul class="feature-list">
+        <li><i class="bi bi-check-circle-fill"></i> Access to QR Code</li>
+        <li><i class="bi bi-check-circle-fill"></i> Basic Support</li>
+        <li><i class="bi bi-check-circle-fill"></i> Usage Logs</li>
+        <li class="unavailable"><i class="bi bi-x-circle-fill"></i> SMS Notifications</li>
+        <li class="unavailable"><i class="bi bi-x-circle-fill"></i> Advanced Reports</li>
+      </ul>
+      <button class="btn avail-btn">Avail This Plan</button>
+    </div>
+
+    <!-- One Semester Plan -->
+    <div class="pricing-card featured">
+      <h2>1 Semester Plan</h2>
+      <div class="price">₱350</div>
+      <p class="desc">5 months / prepaid</p>
+      <ul class="feature-list">
+        <li><i class="bi bi-check-circle-fill"></i> Access to QR Code</li>
+        <li><i class="bi bi-check-circle-fill"></i> SMS Notifications</li>
+        <li><i class="bi bi-check-circle-fill"></i> Priority Support</li>
+        <li><i class="bi bi-check-circle-fill"></i> Basic Analytics</li>
+        <li class="unavailable"><i class="bi bi-x-circle-fill"></i> Advanced Reports</li>
+      </ul>
+      <button class="btn avail-btn">Avail This Plan</button>
+    </div>
+
+    <!-- One Year Plan -->
+    <div class="pricing-card">
+      <h2>1 Year Plan</h2>
+      <div class="price">₱999</div>
+      <p class="desc">12 months / prepaid</p>
+      <ul class="feature-list">
+        <li><i class="bi bi-check-circle-fill"></i> Access to QR Code</li>
+        <li><i class="bi bi-check-circle-fill"></i> SMS Notifications</li>
+        <li><i class="bi bi-check-circle-fill"></i> Full Analytics</li>
+        <li><i class="bi bi-check-circle-fill"></i> Advanced Reports</li>
+        <li><i class="bi bi-check-circle-fill"></i> 24/7 Support</li>
+      </ul>
+      <button class="btn avail-btn">Avail This Plan</button>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- 🟡 TEAM Section -->
+
+<section id="team"> 
+
+<div class="team-section">
+  <h1>Our Team</h1>
+  <p>Meet the talented individuals behind our Smart Parking System. Our diverse team brings together expertise in technology, design, and customer experience.</p>
+
+  <div class="team-grid">
+    <div class="team-member">
+      <img src="static/images/arkin.jpg" loading="lazy">
+      <div class="member-info">
+        <h3>Arkin</h3>
+        <p>Project Manager</p>
+      </div>
+    </div>
+    <div class="team-member">
+      <img src="static/images/janelle.jpeg" loading="lazy">
+      <div class="member-info">
+        <h3>Janelle Christian</h3>
+        <p>Lead Developer</p>
+      </div>
+    </div>
+    <div class="team-member">
+      <img src="static/images/zin.jpeg" loading="lazy">
+      <div class="member-info">
+        <h3>Franzin</h3>
+        <p>Backend Engineer</p>
+      </div>
+    </div>
+    <div class="team-member">
+      <img src="static/images/charlene.jpg" loading="lazy">
+      <div class="member-info">
+        <h3>Charlene Angel</h3>
+        <p>Frontend Developer</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-member">
+      <img src="static/images/Jan.jpg" loading="lazy">
+      <div class="member-info">
+        <h3>Jan Leander</h3>
+        <p>Lead Developer</p>
+      </div>
+    </div>
+    <div class="team-member">
+      <img src="static/images/edward.jpg" loading="lazy">
+      <div class="member-info">
+        <h3>Edward</h3>
+        <p>Tester</p>
+      </div>
+    </div>
+    <div class="team-member">
+      <img src="static/images/mickent.jpg" loading="lazy">
+      <div class="member-info">
+        <h3>Michael Kent</h3>
+        <p>DevOps Engineer</p>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+</section>
+
+
+
+
+
+<!-- contact -->
+<section id="contact">
+    <h2 class="heads">Get In Touch With Us!</h2>
+
+    <div class="contactus-Form">
+        <form action="#">
+            <h1 class="sub-heading">Need Support?</h1>
+            <p class="parag parag2">Feel free to reach out to us with your questions, concerns, or feedback.</p>
+            <input type="text" class="input" placeholder="Name">
+            <input type="text" class="input" placeholder="Email">
+            <input type="text" class="input" placeholder="Subject">
+            <textarea class="input" cols="30" rows="7" placeholder="Your message..."></textarea>
+            <input type="submit" class="input submit" value="Send Message">
+        </form>
+
+        <div class="map-container">
+            <div class="mapBackground"></div>
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d489.54673346846675!2d124.60531168385177!3d11.0105505640292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3307f131d2ab0ad5%3A0xc22c5f5d5de97bf1!2sEastern%20Visayas%20State%20University%20-%20Ormoc%20City%20Campus!5e0!3m2!1sen!2sph!4v1748159125130!5m2!1sen!2sph" 
+                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="contactusMethod">
+        <div class="method">
+            <i class="bi bi-geo-alt-fill contactIcon"></i>
+                <article class="text">
+                    <h1 class="sub-heading">Location</h1>
+                    <p class="parag">Brgy. Don Felipe Larrazabal, Ormoc City, Leyte</p>
+                </article>
+        </div>
+
+        <div class="method">
+            <i class="bi bi-envelope-fill contactIcon"></i>
+            <article class="text">
+                <h1 class="sub-heading">Email</h1>
+                <p class="parag">evsuone@gmail.com</p>
+            </article>
+        </div>
+
+        <div class="method">
+            <i class="bi bi-telephone-fill contactIcon"></i>
+            <article class="text">
+                <h1 class="sub-heading">Phone</h1>
+                <p class="parag">0911-111-1111</p>
+            </article>
+        </div>
+    </div>
+
+</section>
+
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <strong>Smart Parking System</strong>
+                <span>Making parking smarter, one space at a time.</span>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/oc.computerstudies"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Smart Parking System. All rights reserved.
+        </div>  
+    </footer> 
 
 {% endblock %}
