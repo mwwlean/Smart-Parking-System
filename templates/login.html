@@ -1,27 +1,52 @@
 {% extends "base.html" %}
 
 {% block title %}Login{% endblock %}
-
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
 {% block content %}
-    <h2>Login</h2>
+    <!-- <h2>Login</h2> -->
     
-    {% if error %}
+     {% if error %}
         <div class="alert alert-error">{{ error }}</div>
-    {% endif %}
+    {% endif %} 
     
-    <form method="POST" action="{{ url_for('login') }}" style="max-width: 400px;">
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px;">Username:</label>
-            <input type="text" name="username" style="width: 100%; padding: 8px;" required>
+  <!-- Top Logo -->
+  <!-- <div class="logo-container">
+    <img src="../static/images/logo-v3.png" alt="Club Logo">
+  </div> -->
+
+  <!-- Full width layout -->
+  <div class="page-content">
+
+    <!-- Left side: Login form -->
+    <div class="form-section">
+      <h2>Hello,<br> welcome back!</h2>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+          <label >Username:</label>
+           <input type="text" name="username"  placeholder="Enter your email" required>
         </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px;">Password:</label>
-            <input type="password" name="password" style="width: 100%; padding: 8px;" required>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" placeholder="Enter your password" required>
         </div>
-        
-        <button type="submit" style="padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Login</button>
-    </form>
-    
-    <p style="margin-top: 20px;">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+ 
+        <button type="submit">Login</button>
+
+        <div class="login-redirect">
+                Don't have an account?  <a href="{{ url_for('register') }}">Register Here</a>
+          </div>
+      
+      </form>
+    </div>
+
+    <!-- Right side: Image -->
+    <div class="image-section">
+      <img src="../static/images/login_pic1.png" alt="Placeholder Image" />
+    </div>
+
+</div>
+
 {% endblock %}
